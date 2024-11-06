@@ -31,6 +31,7 @@ async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable(TableName.USERS, (table) => {
         table.increments(ColumnName.ID).primary();
         table.string(ColumnName.EMAIL).unique().notNullable();
+        table.string(ColumnName.USERNAME).notNullable();
         table.text(ColumnName.PASSWORD_HASH).notNullable();
         table
             .dateTime(ColumnName.CREATED_AT)
