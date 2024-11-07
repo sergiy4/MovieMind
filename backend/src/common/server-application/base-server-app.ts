@@ -9,7 +9,12 @@ import { HttpError } from '~/bundles/auth/types/types.js';
 
 import { type Database } from '../database/database.js';
 import { HttpCode } from '../enums/enums.js';
+import { type ValidationError } from '../exceptions/exceptions.js';
 import { type Logger } from '../logger/logger.js';
+import {
+    type ServerValidationErrorResponse,
+    type ValidationSchema,
+} from '../types/types.js';
 import { ServerErrorType } from './enums/enums.js';
 import {
     type ServerApp,
@@ -41,12 +46,16 @@ class BaseServerApp implements ServerApp {
     }
 
     public addRoute(parameters: ServerAppRouteParameters): void {
-        const { path, method, handler } = parameters;
+        const { path, method, handler, validation } = parameters;
 
         this.app.route({
             url: path,
             method,
             handler,
+            schema: {
+                body: validation?.body,
+                params: validation?.params,
+            },
         });
 
         this.logger.info(`Route: ${method as string} ${path} is registered`);
@@ -64,13 +73,48 @@ class BaseServerApp implements ServerApp {
         this.addRoutes(routers);
     }
 
+    private initValidationCompiler(): void {
+        this.app.setValidatorCompiler(
+            ({ schema }: { schema: ValidationSchema }) => {
+                return <T, R = ReturnType<ValidationSchema['parse']>>(
+                    data: T,
+                ): R => {
+                    return schema.parse(data) as R;
+                };
+            },
+        );
+    }
+
     private initErrorHandler(): void {
         this.app.setErrorHandler(
             (
-                error: FastifyError,
+                error: FastifyError | ValidationError,
                 _request: FastifyRequest,
                 reply: FastifyReply,
             ) => {
+                if ('issues' in error) {
+                    this.logger.error(`[Validation Error]: ${error.message}`);
+
+                    for (const issue of error.issues) {
+                        this.logger.error(
+                            `[${issue.path.toString()}] — ${issue.message}`,
+                        );
+                    }
+
+                    const response: ServerValidationErrorResponse = {
+                        details: error.issues.map((issue) => ({
+                            message: issue.message,
+                            path: issue.path,
+                        })),
+                        errorType: ServerErrorType.VALIDATION,
+                        message: error.message,
+                    };
+
+                    return reply
+                        .status(HttpCode.UNPROCESSED_ENTITY)
+                        .send(response);
+                }
+
                 if (error instanceof HttpError) {
                     this.logger.error(
                         `[Http Error]: ${error.status.toString()} – ${
@@ -102,6 +146,8 @@ class BaseServerApp implements ServerApp {
 
     public async init(): Promise<void> {
         this.logger.info('Application initialization…');
+
+        this.initValidationCompiler();
 
         this.initErrorHandler();
 
