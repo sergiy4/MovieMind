@@ -7,6 +7,7 @@ import { ApiPath, HttpCode, HTTPMethod } from '~/common/enums/enums.js';
 import { type Logger } from '~/common/logger/logger.js';
 
 import { type UserSignUpRequestDto } from '../users/types/types.js';
+import { userSignUpValidationSchema } from '../users/users.js';
 import { type AuthService } from './auth.service.js';
 import { AuthApiPath } from './enums/enum.js';
 
@@ -21,6 +22,9 @@ class AuthController extends BaseController {
         this.addRoute({
             path: AuthApiPath.SIGN_UP,
             method: HTTPMethod.POST,
+            validation: {
+                body: userSignUpValidationSchema,
+            },
             handler: (options) =>
                 this.signUp(
                     options as ApiHandlerOptions<{

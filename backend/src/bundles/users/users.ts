@@ -8,3 +8,9 @@ const userRepository = new UserRepository(UserModel);
 const userService = new UserService({ cryptService, userRepository });
 
 export { userRepository, userService };
+export {
+    type UserGetAllResponseDto,
+    type UserSignUpRequestDto,
+    type UserSignUpResponseDto,
+} from './types/types.js';
+export { userSignUpValidationSchema } from './validation-schemas/validation-schemas.js';
