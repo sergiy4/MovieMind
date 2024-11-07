@@ -11,6 +11,7 @@ export {
     ExceptionMessage,
     ExceptionName,
     HttpError,
+    ValidationError,
 } from './exceptions/exceptions.js';
 export { type Config } from './packages/config/config.js';
 export {
@@ -22,5 +23,6 @@ export {
 export {
     type ServerCommonErrorResponse,
     type ServerErrorDetail,
+    type ValidationSchema,
     type ValueOf,
 } from './types/types.js';
