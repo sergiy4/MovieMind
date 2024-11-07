@@ -23,6 +23,8 @@ export {
 export {
     type ServerCommonErrorResponse,
     type ServerErrorDetail,
+    type ServerErrorResponse,
+    type ServerValidationErrorResponse,
     type ValidationSchema,
     type ValueOf,
 } from './types/types.js';
