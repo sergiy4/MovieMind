@@ -4,6 +4,7 @@ export {
     type UserGetCurrentResponseDto,
     type UserSignUpRequestDto,
     type UserSignUpResponseDto,
+    userSignUpValidationSchema,
 } from './bundles/users/user.js';
 export { ApiPath, AppEnvironment, ServerErrorType } from './enums/enums.js';
 export {
