@@ -1,0 +1,1 @@
+export { ServerErrorType } from 'shared';
