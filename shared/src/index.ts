@@ -2,8 +2,11 @@ export { AuthApiPath } from './bundles/auth/auth.js';
 export {
     type UserGetAllResponseDto,
     type UserGetCurrentResponseDto,
+    type UserSignInRequestDto,
+    type UserSignInResponseDto,
     type UserSignUpRequestDto,
     type UserSignUpResponseDto,
+    userSignInValidationSchema,
     userSignUpValidationSchema,
 } from './bundles/users/user.js';
 export { ApiPath, AppEnvironment, ServerErrorType } from './enums/enums.js';
