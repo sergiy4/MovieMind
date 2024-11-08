@@ -6,8 +6,14 @@ import {
 import { ApiPath, HttpCode, HTTPMethod } from '~/common/enums/enums.js';
 import { type Logger } from '~/common/logger/logger.js';
 
-import { type UserSignUpRequestDto } from '../users/types/types.js';
-import { userSignUpValidationSchema } from '../users/users.js';
+import {
+    type UserSignInRequestDto,
+    type UserSignUpRequestDto,
+} from '../users/types/types.js';
+import {
+    userSignInValidationSchema,
+    userSignUpValidationSchema,
+} from '../users/users.js';
 import { type AuthService } from './auth.service.js';
 import { AuthApiPath } from './enums/enum.js';
 
@@ -32,6 +38,20 @@ class AuthController extends BaseController {
                     }>,
                 ),
         });
+
+        this.addRoute({
+            method: HTTPMethod.POST,
+            path: AuthApiPath.SIGN_IN,
+            validation: {
+                body: userSignInValidationSchema,
+            },
+            handler: (options) =>
+                this.signIn(
+                    options as ApiHandlerOptions<{
+                        body: UserSignInRequestDto;
+                    }>,
+                ),
+        });
     }
 
     private async signUp(
@@ -42,6 +62,17 @@ class AuthController extends BaseController {
         return {
             status: HttpCode.CREATED,
             payload: await this.authService.signUp(options.body),
+        };
+    }
+
+    private async signIn(
+        options: ApiHandlerOptions<{
+            body: UserSignInRequestDto;
+        }>,
+    ): Promise<ApiHandlerResponse> {
+        return {
+            status: HttpCode.CREATED,
+            payload: await this.authService.signIn(options.body),
         };
     }
 }
