@@ -6,11 +6,15 @@ import Fastify, {
 } from 'fastify';
 
 import { HttpError } from '~/bundles/auth/types/types.js';
+import { userService } from '~/bundles/users/users.js';
 
+import { WHITE_ROUTES } from '../constants/constants.js';
 import { type Database } from '../database/database.js';
 import { HttpCode } from '../enums/enums.js';
 import { type ValidationError } from '../exceptions/exceptions.js';
 import { type Logger } from '../logger/logger.js';
+import { authenticateJWT } from '../plugins/auth/auth-jwt.plugin.js';
+import { tokenService } from '../services/services.js';
 import {
     type ServerValidationErrorResponse,
     type ValidationSchema,
@@ -71,6 +75,16 @@ class BaseServerApp implements ServerApp {
         const routers = this.apis.flatMap((it) => it.routes);
 
         this.addRoutes(routers);
+    }
+
+    private registerPlugins(): void {
+        void this.app.register(authenticateJWT, {
+            services: {
+                tokenService,
+                userService,
+            },
+            routesWhiteList: WHITE_ROUTES,
+        });
     }
 
     private initValidationCompiler(): void {
@@ -146,6 +160,8 @@ class BaseServerApp implements ServerApp {
 
     public async init(): Promise<void> {
         this.logger.info('Application initialization…');
+
+        this.registerPlugins();
 
         this.initValidationCompiler();
 
