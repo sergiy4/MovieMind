@@ -1,6 +1,7 @@
 type DefaultApiHandlerOptions = {
     body?: unknown;
     user?: unknown;
+    params?: unknown;
 };
 
 type ApiHandlerOptions<
@@ -8,6 +9,7 @@ type ApiHandlerOptions<
 > = {
     body: T['body'];
     user: T['user'];
+    params: T['params'];
 };
 
 export { type ApiHandlerOptions };

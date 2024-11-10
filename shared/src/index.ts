@@ -1,5 +1,21 @@
 export { AuthApiPath } from './bundles/auth/auth.js';
 export {
+    type Chat,
+    type CreateCharResponseDto,
+    type CreateChatRequestDto,
+    type DeleteChatRequestDto,
+    type DeleteChatResponseDto,
+    type GetCurrentChatRequestDto,
+    type GetUserChatListResponseDto,
+    type UpdateChatRequestDto,
+    type UpdateChatResponseDto,
+    ChatApiPath,
+    ChatValidationMessage,
+    ChatValidationRule,
+    createChatValidationSchema,
+    updateChatValidationSchema,
+} from './bundles/chats/chats.js';
+export {
     type UserGetAllResponseDto,
     type UserGetCurrentResponseDto,
     type UserSignInRequestDto,
@@ -8,7 +24,7 @@ export {
     type UserSignUpResponseDto,
     userSignInValidationSchema,
     userSignUpValidationSchema,
-} from './bundles/users/user.js';
+} from './bundles/users/users.js';
 export { ApiPath, AppEnvironment, ServerErrorType } from './enums/enums.js';
 export {
     ExceptionMessage,
