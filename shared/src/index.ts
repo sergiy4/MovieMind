@@ -16,6 +16,22 @@ export {
     updateChatValidationSchema,
 } from './bundles/chats/chats.js';
 export {
+    type CreateMessageRequestDto,
+    type GetMessagesBodyRequestDto,
+    type GetMessagesParametersRequestDto,
+    type GetMessagesRequestDto,
+    type GetMessagesResponseDto,
+    type Message,
+    type MessageSender,
+    type SendMessageRequestDto,
+    type SendMessageResponseDto,
+    MessageApiPath,
+    MessageValidationMessage,
+    MessageValidationRule,
+    Sender,
+    sendMessageValidationSchema,
+} from './bundles/messages/messages.js';
+export {
     type UserGetAllResponseDto,
     type UserGetCurrentResponseDto,
     type UserSignInRequestDto,
