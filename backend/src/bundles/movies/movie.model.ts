@@ -1,7 +1,12 @@
+import { type RelationMappings, Model } from 'objection';
+
 import {
     AbstractModel,
     DatabaseTableName,
 } from '~/common/database/database.js';
+
+import { MessageModel } from '../messages/messages.js';
+import { MessagesToMoviesModel } from '../messages/messages-to-movies.model.js';
 
 class MovieModel extends AbstractModel {
     public 'name': string;
@@ -16,6 +21,24 @@ class MovieModel extends AbstractModel {
 
     public static override get tableName(): string {
         return DatabaseTableName.MOVIES;
+    }
+
+    public static get relationMappings(): RelationMappings {
+        return {
+            messages: {
+                join: {
+                    from: `${DatabaseTableName.MOVIES}.id`,
+                    through: {
+                        from: `${DatabaseTableName.MESSAGES_TO_MOVIES}.movieId`,
+                        to: `${DatabaseTableName.MESSAGES_TO_MOVIES}.messageId`,
+                        modelClass: MessagesToMoviesModel,
+                    },
+                    to: `${DatabaseTableName.MESSAGES}.id`,
+                },
+                modelClass: MessageModel,
+                relation: Model.ManyToManyRelation,
+            },
+        };
     }
 }
 

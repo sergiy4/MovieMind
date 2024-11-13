@@ -6,6 +6,7 @@ const messageRepository = new MessageRepository(MessageModel);
 const messageService = new MessageService({ messageRepository });
 
 export { messageService };
+export { MessageModel } from './message.model.js';
 export {
     type CreateMessageRequestDto,
     type GetMessagesRequestDto,
