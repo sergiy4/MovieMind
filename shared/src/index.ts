@@ -32,6 +32,11 @@ export {
     sendMessageValidationSchema,
 } from './bundles/messages/messages.js';
 export {
+    type GetMovieRequestDto,
+    type GetMovieResponseDto,
+    type Movie,
+} from './bundles/movies/movies.js';
+export {
     type UserGetAllResponseDto,
     type UserGetCurrentResponseDto,
     type UserSignInRequestDto,
