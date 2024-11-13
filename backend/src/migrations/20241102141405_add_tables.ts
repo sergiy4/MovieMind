@@ -21,7 +21,7 @@ const ColumnName = {
     SENDER: 'sender',
 
     YEAR: 'year',
-    POSTER_ID: 'poster_id',
+    POSTER_URL: 'poster_url',
     TMDB_ID: 'tmdb_id',
     DESCRIPTION: 'description',
     TYPE: 'type',
@@ -79,7 +79,7 @@ async function up(knex: Knex): Promise<void> {
         table.increments(ColumnName.ID).primary();
         table.string(ColumnName.NAME).notNullable();
         table.string(ColumnName.YEAR).notNullable();
-        table.string(ColumnName.POSTER_ID).notNullable();
+        table.string(ColumnName.POSTER_URL).notNullable();
         table.string(ColumnName.DESCRIPTION).notNullable();
         table.enu(ColumnName.TYPE, ['movie', 'series'], {
             useNative: true,
