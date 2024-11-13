@@ -6,4 +6,5 @@ const movieRepository = new MovieRepository(MovieModel);
 const movieService = new MovieService({ movieRepository });
 
 export { movieService };
+export { MovieModel } from './movie.model.js';
 export { type Movie } from './types/types.js';

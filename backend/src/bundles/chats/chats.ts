@@ -7,7 +7,8 @@ const chatRepository = new ChatRepository(ChatModel);
 const chatService = new ChatService({ chatRepository });
 const chatController = new ChatController({ chatService });
 
-export { chatController,chatService };
+export { chatController, chatService };
+export { ChatModel } from './chat.model.js';
 export { ChatApiPath, ChatErrorMessage } from './enums/enums.js';
 export {
     type Chat,
