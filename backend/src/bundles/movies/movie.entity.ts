@@ -1,5 +1,7 @@
 import { type Entity } from '~/common/types/types.js';
 
+import { type ContentType } from './types/types.js';
+
 class MovieEntity implements Entity {
     private 'id': number | null;
 
@@ -13,6 +15,8 @@ class MovieEntity implements Entity {
 
     private 'tmdbId': string;
 
+    private 'type': ContentType;
+
     private constructor({
         id,
         description,
@@ -20,6 +24,7 @@ class MovieEntity implements Entity {
         posterUrl,
         tmdbId,
         year,
+        type,
     }: {
         id: number | null;
         name: string;
@@ -27,6 +32,7 @@ class MovieEntity implements Entity {
         posterUrl: string;
         description: string;
         tmdbId: string;
+        type: ContentType;
     }) {
         this.id = id;
         this.name = name;
@@ -34,6 +40,7 @@ class MovieEntity implements Entity {
         this.year = year;
         this.description = description;
         this.tmdbId = tmdbId;
+        this.type = type;
     }
 
     public static initialize({
@@ -43,6 +50,7 @@ class MovieEntity implements Entity {
         posterUrl,
         tmdbId,
         year,
+        type,
     }: {
         id: number;
         name: string;
@@ -50,6 +58,7 @@ class MovieEntity implements Entity {
         posterUrl: string;
         description: string;
         tmdbId: string;
+        type: ContentType;
     }): MovieEntity {
         return new MovieEntity({
             id,
@@ -58,6 +67,7 @@ class MovieEntity implements Entity {
             posterUrl,
             tmdbId,
             year,
+            type,
         });
     }
 
@@ -67,12 +77,14 @@ class MovieEntity implements Entity {
         posterUrl,
         tmdbId,
         year,
+        type,
     }: {
         name: string;
         year: string;
         posterUrl: string;
         description: string;
         tmdbId: string;
+        type: ContentType;
     }): MovieEntity {
         return new MovieEntity({
             id: null,
@@ -81,6 +93,7 @@ class MovieEntity implements Entity {
             posterUrl,
             tmdbId,
             year,
+            type,
         });
     }
 
@@ -91,6 +104,7 @@ class MovieEntity implements Entity {
         posterUrl: string;
         description: string;
         tmdbId: string;
+        type: ContentType;
     } {
         return {
             id: this.id as number,
@@ -99,6 +113,7 @@ class MovieEntity implements Entity {
             posterUrl: this.posterUrl,
             tmdbId: this.tmdbId,
             year: this.year,
+            type: this.type,
         };
     }
 
@@ -108,6 +123,7 @@ class MovieEntity implements Entity {
         posterUrl: string;
         description: string;
         tmdbId: string;
+        type: ContentType;
     } {
         return {
             description: this.description,
@@ -115,6 +131,7 @@ class MovieEntity implements Entity {
             posterUrl: this.posterUrl,
             tmdbId: this.tmdbId,
             year: this.year,
+            type: this.type,
         };
     }
 }
