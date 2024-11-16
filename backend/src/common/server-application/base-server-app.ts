@@ -49,6 +49,10 @@ class BaseServerApp implements ServerApp {
         this.app = Fastify();
     }
 
+    public getDatabase(): Database {
+        return this.database;
+    }
+
     public addRoute(parameters: ServerAppRouteParameters): void {
         const { path, method, handler, validation } = parameters;
 
