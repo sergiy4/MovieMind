@@ -6,8 +6,8 @@ export {
 } from './enums/enums.js';
 export {
     type CreateMessageRequestDto,
-    type GetMessagesBodyRequestDto,
     type GetMessagesParametersRequestDto,
+    type GetMessagesQueryRequestDto,
     type GetMessagesRequestDto,
     type GetMessagesResponseDto,
     type Message,
@@ -15,4 +15,7 @@ export {
     type SendMessageRequestDto,
     type SendMessageResponseDto,
 } from './types/types.js';
-export { sendMessage as sendMessageValidationSchema } from './validation-schemas/validation-schemas.js';
+export {
+    getMessagesQuery as getMessagesQueryValidationSchema,
+    sendMessage as sendMessageValidationSchema,
+} from './validation-schemas/validation-schemas.js';

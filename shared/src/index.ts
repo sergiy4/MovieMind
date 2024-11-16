@@ -17,14 +17,15 @@ export {
 } from './bundles/chats/chats.js';
 export {
     type CreateMessageRequestDto,
-    type GetMessagesBodyRequestDto,
     type GetMessagesParametersRequestDto,
+    type GetMessagesQueryRequestDto,
     type GetMessagesRequestDto,
     type GetMessagesResponseDto,
     type Message,
     type MessageSender,
     type SendMessageRequestDto,
     type SendMessageResponseDto,
+    getMessagesQueryValidationSchema,
     MessageApiPath,
     MessageValidationMessage,
     MessageValidationRule,

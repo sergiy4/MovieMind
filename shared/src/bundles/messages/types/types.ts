@@ -1,6 +1,6 @@
 export { type CreateMessageRequestDto } from './create-message-request-dto.type.js';
-export { type GetMessagesBodyRequestDto } from './get-messages-body-request-dto.type.js';
 export { type GetMessagesParametersRequestDto } from './get-messages-parameters-request-dto.type.js';
+export { type GetMessagesQueryRequestDto } from './get-messages-query-request-dto.type.js';
 export { type GetMessagesRequestDto } from './get-messages-request-dto.type.js';
 export { type GetMessagesResponseDto } from './get-messages-response-dto.type.js';
 export { type Message } from './message.type.js';
