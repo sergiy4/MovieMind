@@ -13,15 +13,24 @@ class BaseDatabase implements Database {
 
     private logger: Logger;
 
+    private knex: TKnex | null;
+
     public constructor(config: Config, logger: Logger) {
+        this.knex = null;
         this.appConfig = config;
         this.logger = logger;
+    }
+
+    public getKnex(): TKnex {
+        return this.knex as TKnex;
     }
 
     public connect(): ReturnType<Database['connect']> {
         this.logger.info('Establish DB connection...');
 
-        Model.knex(Knex(this.environmentConfig));
+        const knex = Knex(this.environmentConfig);
+        Model.knex(knex);
+        this.knex = knex;
     }
 
     public get environmentsConfig(): Database['environmentsConfig'] {

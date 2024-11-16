@@ -16,7 +16,7 @@ class MovieService implements Service {
     }
 
     public async create(payload: Omit<Movie, 'id'>): Promise<Movie> {
-        const { description, name, posterUrl, tmdbId, year } = payload;
+        const { description, name, posterUrl, tmdbId, year, type } = payload;
 
         const movie = await this.movieRepository.create(
             MovieEntity.initializeNew({
@@ -25,10 +25,26 @@ class MovieService implements Service {
                 posterUrl,
                 tmdbId,
                 year,
+                type,
             }),
         );
 
         return movie.toObject();
+    }
+
+    public async createWithMessageRelation(
+        payload: Omit<Movie, 'id'>[],
+        messageId: number,
+    ): Promise<Movie[]> {
+        const movies = await this.movieRepository.createWithMessageRelation(
+            payload.map((movie) =>
+                MovieEntity.initializeNew({
+                    ...movie,
+                }),
+            ),
+            messageId,
+        );
+        return movies.map((it) => it.toObject());
     }
 
     public async findAll(): Promise<{ items: Movie[] }> {

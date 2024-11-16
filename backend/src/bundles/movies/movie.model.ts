@@ -7,6 +7,7 @@ import {
 
 import { MessageModel } from '../messages/messages.js';
 import { MessagesToMoviesModel } from '../messages/messages-to-movies.model.js';
+import { type ContentType } from './types/types.js';
 
 class MovieModel extends AbstractModel {
     public 'name': string;
@@ -18,6 +19,8 @@ class MovieModel extends AbstractModel {
     public 'description': string;
 
     public 'tmdbId': string;
+
+    public 'type': ContentType;
 
     public static override get tableName(): string {
         return DatabaseTableName.MOVIES;

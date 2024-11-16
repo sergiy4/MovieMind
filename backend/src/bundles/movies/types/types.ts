@@ -1,1 +1,1 @@
-export { type Movie } from 'shared';
+export { type ContentType, type Movie } from 'shared';

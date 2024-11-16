@@ -94,6 +94,8 @@ async function up(knex: Knex): Promise<void> {
             .dateTime(ColumnName.UPDATED_AT)
             .notNullable()
             .defaultTo(knex.fn.now());
+
+        table.unique([ColumnName.TYPE, ColumnName.TMDB_ID]);
     });
 }
 

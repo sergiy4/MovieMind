@@ -1,3 +1,4 @@
+import { RelationName } from '~/common/enums/enums.js';
 import { type Repository } from '~/common/types/types.js';
 
 import { MovieEntity } from './movie.entity.js';
@@ -27,6 +28,38 @@ class MovieRepository implements Repository {
             .execute();
 
         return MovieEntity.initialize(item);
+    }
+
+    public async createWithMessageRelation(
+        entities: MovieEntity[],
+        messageId: number,
+    ): Promise<MovieEntity[]> {
+        const movies = entities.map((movie) => movie.toNewObject());
+
+        const createdMovies = await this.movieModel
+            .query()
+            .insert(movies)
+            .onConflict(['tmdb_id', 'type'])
+            .ignore()
+            .then(async (data) => {
+                return await this.movieModel
+                    .query()
+                    .whereIn(
+                        ['tmdbId', 'type'],
+                        data.map((it) => [it.tmdbId, it.type]),
+                    )
+                    .execute();
+            });
+
+        await Promise.all(
+            createdMovies.map((movie) => {
+                return movie
+                    .$relatedQuery(RelationName.MESSAGES)
+                    .relate(messageId);
+            }),
+        );
+
+        return createdMovies.map((it) => MovieEntity.initialize(it));
     }
 
     public async findById(id: number): Promise<MovieEntity | null> {
