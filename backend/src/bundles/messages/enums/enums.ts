@@ -1,0 +1,1 @@
+export { MessageApiPath } from 'shared';

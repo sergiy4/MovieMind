@@ -16,6 +16,8 @@ class MessageModel extends AbstractModel {
 
     public 'chatId': number;
 
+    public 'movies': MovieModel[];
+
     public static override get tableName(): string {
         return DatabaseTableName.MESSAGES;
     }

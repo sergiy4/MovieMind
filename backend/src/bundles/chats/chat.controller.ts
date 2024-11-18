@@ -6,6 +6,11 @@ import {
 import { HttpCode, HTTPMethod } from '~/common/enums/enums.js';
 import { logger } from '~/common/logger/logger.js';
 
+import { type MessageService } from '../messages/message.service.js';
+import {
+    type GetMessagesQueryRequestDto,
+    MessageApiPath,
+} from '../messages/messages.js';
 import { type UserGetCurrentResponseDto } from '../users/users.js';
 import { type ChatService } from './chat.service.js';
 import { ApiPath, ChatApiPath } from './enums/enums.js';
@@ -21,14 +26,19 @@ import {
 
 type Constructor = {
     chatService: ChatService;
+    messageService: MessageService;
 };
 
 class ChatController extends BaseController {
     private chatService: ChatService;
-    public constructor({ chatService }: Constructor) {
+    private messageService: MessageService;
+
+    public constructor({ chatService, messageService }: Constructor) {
         super(logger, ApiPath.CHATS);
 
         this.chatService = chatService;
+        this.messageService = messageService;
+
         this.addRoute({
             path: ChatApiPath.ROOT,
             method: HTTPMethod.GET,
@@ -77,6 +87,18 @@ class ChatController extends BaseController {
                 this.deleteChat(
                     options as ApiHandlerOptions<{
                         params: GetCurrentChatRequestDto;
+                    }>,
+                ),
+        });
+
+        this.addRoute({
+            path: `${ChatApiPath.ID}${MessageApiPath.ROOT}`,
+            method: HTTPMethod.GET,
+            handler: (options) =>
+                this.getCurrentChatMessages(
+                    options as ApiHandlerOptions<{
+                        params: { id: number };
+                        query: GetMessagesQueryRequestDto;
                     }>,
                 ),
         });
@@ -134,6 +156,21 @@ class ChatController extends BaseController {
             payload: await this.chatService.getCurrentUserChats(
                 options.user.id,
             ),
+            status: HttpCode.OK,
+        };
+    }
+
+    private async getCurrentChatMessages(
+        options: ApiHandlerOptions<{
+            params: { id: number };
+            query: GetMessagesQueryRequestDto;
+        }>,
+    ): Promise<ApiHandlerResponse> {
+        return {
+            payload: await this.messageService.getByFilterWithMovies({
+                ...options.query,
+                chatId: options.params.id,
+            }),
             status: HttpCode.OK,
         };
     }

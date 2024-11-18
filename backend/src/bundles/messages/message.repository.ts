@@ -1,5 +1,7 @@
+import { RelationName } from '~/common/enums/enums.js';
 import { type Repository } from '~/common/types/repository.type.js';
 
+import { MovieEntity } from '../movies/movie.entity.js';
 import { MessageEntity } from './message.entity.js';
 import { type MessageModel } from './message.model.js';
 import { type GetMessagesRequestDto } from './types/types.js';
@@ -12,29 +14,48 @@ class MessageRepository implements Repository {
     }
 
     public async findById(id: number): Promise<MessageEntity | null> {
-        const user = await this.messageModel.query().findById(id).execute();
+        const message = await this.messageModel.query().findById(id).execute();
 
-        return user ? MessageEntity.initialize(user) : null;
+        return message
+            ? MessageEntity.initialize({
+                  ...message,
+                  movies: [],
+              })
+            : null;
     }
 
     public async findAll(): Promise<MessageEntity[]> {
-        const users = await this.messageModel.query().execute();
+        const messages = await this.messageModel.query().execute();
 
-        return users.map((it) => MessageEntity.initialize(it));
+        return messages.map((it) =>
+            MessageEntity.initialize({
+                ...it,
+                movies: [],
+            }),
+        );
     }
 
-    public async findByChatId(
+    public async getByFilterWithMovies(
         data: GetMessagesRequestDto,
     ): Promise<MessageEntity[]> {
-        const { chatId, limit, offset } = data;
-        const chats = await this.messageModel
+        const { chatId, limit, lastMessageId } = data;
+
+        const messagesWithMovies = await this.messageModel
             .query()
             .where('chatId', chatId)
-            .offset(offset)
+            .andWhere('id', '<', lastMessageId)
+            .withGraphFetched(RelationName.MOVIES)
+            .orderBy('created_at', 'desc')
             .limit(limit)
             .execute();
 
-        return chats.map((it) => MessageEntity.initialize(it));
+        return messagesWithMovies.map((it) =>
+            MessageEntity.initialize({
+                ...it,
+                movies: it.movies.map((movie) => MovieEntity.initialize(movie)),
+            }),
+        );
+        //
     }
 
     public async create(entity: MessageEntity): Promise<MessageEntity> {
@@ -49,7 +70,7 @@ class MessageRepository implements Repository {
             })
             .execute();
 
-        return MessageEntity.initialize(message);
+        return MessageEntity.initialize({ ...message, movies: [] });
     }
 
     public async createMany(
@@ -62,7 +83,12 @@ class MessageRepository implements Repository {
             .insert(objects)
             .execute();
 
-        return messages.map((item) => MessageEntity.initialize(item));
+        return messages.map((item) =>
+            MessageEntity.initialize({
+                ...item,
+                movies: [],
+            }),
+        );
     }
 
     public update(): ReturnType<Repository['update']> {
