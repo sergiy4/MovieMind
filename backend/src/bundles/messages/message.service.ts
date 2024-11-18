@@ -2,6 +2,8 @@ import { MessageEntity } from './message.entity.js';
 import { type MessageRepository } from './message.repository.js';
 import {
     type CreateMessageRequestDto,
+    type GetMessagesRequestDto,
+    type GetMessagesWithMoviesResponseDto,
     type SendMessageResponseDto,
 } from './types/types.js';
 
@@ -23,6 +25,7 @@ class MessageService {
             data.map((message) =>
                 MessageEntity.initializeNew({
                     ...message,
+                    movies: [],
                 }),
             ),
         );
@@ -36,10 +39,19 @@ class MessageService {
         const message = await this.messageRepository.create(
             MessageEntity.initializeNew({
                 ...data,
+                movies: [],
             }),
         );
 
         return message.toObject();
+    }
+
+    public async getByFilterWithMovies(
+        data: GetMessagesRequestDto,
+    ): Promise<GetMessagesWithMoviesResponseDto> {
+        const messages =
+            await this.messageRepository.getByFilterWithMovies(data);
+        return messages.map((message) => message.toObject());
     }
 }
 
