@@ -16,6 +16,9 @@ type EnvironmentSchema = {
         SECRET_KEY: string;
         EXPIRATION_TIME: string;
     };
+    AI_ASSISTANT: {
+        AI_ASSISTANT_KEY: string;
+    };
 };
 
 export { type EnvironmentSchema };

@@ -82,6 +82,14 @@ class BaseConfig implements Config {
                     default: null,
                 },
             },
+            AI_ASSISTANT: {
+                AI_ASSISTANT_KEY: {
+                    doc: 'Key for AI Assistant',
+                    format: String,
+                    env: 'AI_ASSISTANT_KEY',
+                    default: null,
+                },
+            },
         });
     }
 }
