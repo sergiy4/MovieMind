@@ -1,5 +1,5 @@
 type GetMessagesQueryRequestDto = {
-    offset: number;
+    lastMessageId: number;
     limit: number;
 };
 
