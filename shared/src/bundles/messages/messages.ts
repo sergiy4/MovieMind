@@ -10,12 +10,10 @@ export {
     type GetMessagesQueryRequestDto,
     type GetMessagesRequestDto,
     type GetMessagesResponseDto,
+    type GetMessagesWithMoviesResponseDto,
     type Message,
     type MessageSender,
     type SendMessageRequestDto,
     type SendMessageResponseDto,
 } from './types/types.js';
-export {
-    getMessagesQuery as getMessagesQueryValidationSchema,
-    sendMessage as sendMessageValidationSchema,
-} from './validation-schemas/validation-schemas.js';
+export { sendMessage as sendMessageValidationSchema } from './validation-schemas/validation-schemas.js';
