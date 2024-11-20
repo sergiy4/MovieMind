@@ -19,6 +19,9 @@ type EnvironmentSchema = {
     AI_ASSISTANT: {
         AI_ASSISTANT_KEY: string;
     };
+    SESSION: {
+        SESSION_KEY: string;
+    };
 };
 
 export { type EnvironmentSchema };

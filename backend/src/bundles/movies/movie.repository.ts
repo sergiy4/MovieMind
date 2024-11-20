@@ -63,15 +63,15 @@ class MovieRepository implements Repository {
     }
 
     public async findById(id: number): Promise<MovieEntity | null> {
-        const user = await this.movieModel.query().findById(id).execute();
+        const movie = await this.movieModel.query().findById(id).execute();
 
-        return user ? MovieEntity.initialize(user) : null;
+        return movie ? MovieEntity.initialize(movie) : null;
     }
 
     public async findAll(): Promise<MovieEntity[]> {
-        const users = await this.movieModel.query().execute();
+        const movies = await this.movieModel.query().execute();
 
-        return users.map((it) => MovieEntity.initialize(it));
+        return movies.map((it) => MovieEntity.initialize(it));
     }
 
     public update(): ReturnType<Repository['update']> {

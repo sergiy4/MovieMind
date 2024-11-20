@@ -21,7 +21,7 @@ class AuthController extends BaseController {
     private authService: AuthService;
 
     public constructor(logger: Logger, authService: AuthService) {
-        super(logger, ApiPath.AUTH);
+        super({ logger, apiPath: ApiPath.AUTH });
 
         this.authService = authService;
 
