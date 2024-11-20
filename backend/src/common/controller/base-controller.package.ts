@@ -1,5 +1,9 @@
 import { type Logger } from '~/common/logger/logger.js';
 
+import {
+    type PluginsOptions,
+    type PluginWithOptions,
+} from '../plugins/types/types.js';
 import { type ServerAppRouteParameters } from '../server-application/types/types.js';
 import {
     type ApiHandler,
@@ -8,6 +12,12 @@ import {
     type ControllerRouteParameters,
 } from './types/types.js';
 
+type Constructor = {
+    logger: Logger;
+    apiPath: string;
+    isNewContext?: boolean;
+};
+
 class BaseController implements Controller {
     private logger: Logger;
 
@@ -15,10 +25,16 @@ class BaseController implements Controller {
 
     public routes: ServerAppRouteParameters[];
 
-    public constructor(logger: Logger, apiPath: string) {
+    public isNewContext: boolean;
+
+    public plugins: PluginsOptions;
+
+    public constructor({ logger, apiPath, isNewContext = false }: Constructor) {
         this.logger = logger;
         this.apiUrl = apiPath;
+        this.isNewContext = isNewContext;
         this.routes = [];
+        this.plugins = [];
     }
 
     public addRoute(options: ControllerRouteParameters): void {
@@ -30,6 +46,15 @@ class BaseController implements Controller {
             path: fullPath,
             handler: (request, reply) =>
                 this.mapHandler(handler, request, reply),
+        });
+    }
+
+    public addPlugin<T>(pluginData: PluginWithOptions<T>): void {
+        const { plugin, options } = pluginData;
+
+        this.plugins.push({
+            plugin,
+            options,
         });
     }
 

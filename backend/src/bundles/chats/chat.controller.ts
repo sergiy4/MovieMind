@@ -1,3 +1,4 @@
+import { config } from '~/common/config/config.js';
 import { BaseController } from '~/common/controller/base-controller.package.js';
 import {
     type ApiHandlerOptions,
@@ -5,6 +6,11 @@ import {
 } from '~/common/controller/types/types.js';
 import { HttpCode, HTTPMethod } from '~/common/enums/enums.js';
 import { logger } from '~/common/logger/logger.js';
+import {
+    type SessionOptions,
+    session,
+} from '~/common/plugins/session/session.plugin.js';
+import { type Plugin } from '~/common/plugins/types/types.js';
 
 import { type MessageService } from '../messages/message.service.js';
 import {
@@ -34,10 +40,23 @@ class ChatController extends BaseController {
     private messageService: MessageService;
 
     public constructor({ chatService, messageService }: Constructor) {
-        super(logger, ApiPath.CHATS);
+        super({
+            logger,
+            apiPath: ApiPath.CHATS,
+            isNewContext: true,
+        });
 
         this.chatService = chatService;
         this.messageService = messageService;
+
+        this.addPlugin<SessionOptions>({
+            plugin: session as Plugin,
+            options: {
+                services: {
+                    config,
+                },
+            },
+        });
 
         this.addRoute({
             path: ChatApiPath.ROOT,

@@ -1,22 +1,22 @@
-import {
-    type ServerAppApi,
-    type ServerAppRouteParameters,
-} from './types/types.js';
+import { type ControllerParameters } from './types/controller-parameters.type.js';
+import { type ServerAppApi } from './types/types.js';
 
 class BaseServerAppApi implements ServerAppApi {
     public version: string;
 
-    public routes: ServerAppRouteParameters[];
+    public controllers: ControllerParameters[];
 
-    public constructor(
-        version: string,
-        ...handlers: ServerAppRouteParameters[]
-    ) {
+    public constructor(version: string, controllers: ControllerParameters[]) {
         this.version = version;
-        this.routes = handlers.map((it) => ({
-            ...it,
-            path: `/api/${this.version}${it.path}`,
-        }));
+        this.controllers = controllers.map((controller) => {
+            return {
+                ...controller,
+                routes: (controller.routes = controller.routes.map((it) => ({
+                    ...it,
+                    path: `/api/${this.version}${it.path}`,
+                }))),
+            };
+        });
     }
 }
 

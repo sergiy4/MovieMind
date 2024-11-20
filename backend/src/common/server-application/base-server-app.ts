@@ -1,6 +1,7 @@
 import Fastify, {
     type FastifyError,
     type FastifyInstance,
+    type FastifyPluginOptions,
     type FastifyReply,
     type FastifyRequest,
 } from 'fastify';
@@ -14,6 +15,7 @@ import { HttpCode } from '../enums/enums.js';
 import { type ValidationError } from '../exceptions/exceptions.js';
 import { type Logger } from '../logger/logger.js';
 import { authenticateJWT } from '../plugins/auth/auth-jwt.plugin.js';
+import { type PluginsOptions } from '../plugins/types/plugin-with-options.type.js';
 import { tokenService } from '../services/services.js';
 import {
     type ServerValidationErrorResponse,
@@ -53,10 +55,13 @@ class BaseServerApp implements ServerApp {
         return this.database;
     }
 
-    public addRoute(parameters: ServerAppRouteParameters): void {
+    public addRoute(
+        parameters: ServerAppRouteParameters,
+        context = this.app,
+    ): void {
         const { path, method, handler, validation } = parameters;
 
-        this.app.route({
+        context.route({
             url: path,
             method,
             handler,
@@ -76,10 +81,38 @@ class BaseServerApp implements ServerApp {
         }
     }
 
-    public initRoutes(): void {
-        const routers = this.apis.flatMap((it) => it.routes);
+    public addRoutesWithNewContext(
+        parameters: ServerAppRouteParameters[],
+        plugins: PluginsOptions,
+    ): void {
+        void this.app.register((fastify, _options, done) => {
+            for (const it of plugins) {
+                void fastify.register(
+                    it.plugin,
+                    it.options as FastifyPluginOptions,
+                );
+            }
 
-        this.addRoutes(routers);
+            for (const it of parameters) {
+                this.addRoute(it, fastify);
+            }
+
+            done();
+        });
+    }
+
+    public initRoutes(): void {
+        const controllers = this.apis.flatMap((it) => it.controllers);
+
+        for (const controller of controllers) {
+            controller.plugins;
+            controller.isNewContext
+                ? this.addRoutesWithNewContext(
+                      controller.routes,
+                      controller.plugins as PluginsOptions,
+                  )
+                : this.addRoutes(controller.routes);
+        }
     }
 
     private registerPlugins(): void {
