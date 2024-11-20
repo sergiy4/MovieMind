@@ -90,6 +90,14 @@ class BaseConfig implements Config {
                     default: null,
                 },
             },
+            SESSION: {
+                SESSION_KEY: {
+                    doc: 'Key for sessions',
+                    format: String,
+                    env: 'SESSION_KEY',
+                    default: null,
+                },
+            },
         });
     }
 }
