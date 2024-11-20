@@ -1,8 +1,8 @@
-import { type ServerAppRouteParameters } from './types.js';
+import { type ControllerParameters } from './controller-parameters.type.js';
 
 interface ServerAppApi {
     version: string;
-    routes: ServerAppRouteParameters[];
+    controllers: ControllerParameters[];
 }
 
 export { type ServerAppApi };
