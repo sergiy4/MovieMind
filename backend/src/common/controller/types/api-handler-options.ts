@@ -3,6 +3,7 @@ type DefaultApiHandlerOptions = {
     user?: unknown;
     params?: unknown;
     query?: unknown;
+    session?: unknown;
 };
 
 type ApiHandlerOptions<
@@ -12,6 +13,7 @@ type ApiHandlerOptions<
     user: T['user'];
     params: T['params'];
     query: T['query'];
+    session: T['session'];
 };
 
 export { type ApiHandlerOptions };
