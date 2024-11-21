@@ -58,8 +58,11 @@ export {
 } from './exceptions/exceptions.js';
 export { type Config } from './packages/config/config.js';
 export {
+    type Http,
     type HttpMethod,
+    type HttpOptions,
     HttpCode,
+    HttpContentType,
     HttpHeader,
     HTTPMethod,
 } from './packages/http/http.js';
