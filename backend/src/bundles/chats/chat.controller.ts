@@ -1,3 +1,5 @@
+import { type FastifySessionObject } from '@fastify/session';
+
 import { config } from '~/common/config/config.js';
 import { BaseController } from '~/common/controller/base-controller.package.js';
 import {
@@ -11,6 +13,7 @@ import {
     session,
 } from '~/common/plugins/session/session.plugin.js';
 import { type Plugin } from '~/common/plugins/types/types.js';
+import { textTokenCounterService } from '~/common/services/services.js';
 
 import { type MessageService } from '../messages/message.service.js';
 import {
@@ -54,6 +57,7 @@ class ChatController extends BaseController {
             options: {
                 services: {
                     config,
+                    textTokenCounterService,
                 },
             },
         });
@@ -80,6 +84,7 @@ class ChatController extends BaseController {
                     options as ApiHandlerOptions<{
                         body: CreateChatRequestDto;
                         user: UserGetCurrentResponseDto;
+                        session: FastifySessionObject;
                     }>,
                 ),
         });
@@ -106,6 +111,7 @@ class ChatController extends BaseController {
                 this.deleteChat(
                     options as ApiHandlerOptions<{
                         params: GetCurrentChatRequestDto;
+                        session: FastifySessionObject;
                     }>,
                 ),
         });
@@ -127,12 +133,16 @@ class ChatController extends BaseController {
         options: ApiHandlerOptions<{
             body: CreateChatRequestDto;
             user: UserGetCurrentResponseDto;
+            session: FastifySessionObject;
         }>,
     ): Promise<ApiHandlerResponse> {
+        const { body, user, session } = options;
         const chat = await this.chatService.createChat({
-            ...options.body,
-            userId: options.user.id,
+            ...body,
+            userId: user.id,
         });
+
+        session.chatsContextManager.addChat(chat.id);
 
         return {
             payload: chat,
@@ -158,10 +168,17 @@ class ChatController extends BaseController {
     private async deleteChat(
         options: ApiHandlerOptions<{
             params: GetCurrentChatRequestDto;
+            session: FastifySessionObject;
         }>,
     ): Promise<ApiHandlerResponse> {
+        const { session, params } = options;
+
+        const result = await this.chatService.deleteChat(params);
+
+        session.chatsContextManager.deleteChat(params.id);
+
         return {
-            payload: await this.chatService.deleteChat(options.params),
+            payload: result,
             status: HttpCode.OK,
         };
     }

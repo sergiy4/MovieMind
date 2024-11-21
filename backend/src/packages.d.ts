@@ -1,5 +1,5 @@
 import { type UserGetCurrentResponseDto } from './bundles/users/users.ts';
-import { type ContextChatsMessages } from './common/plugins/session/types/types.ts';
+import { type ChatsContextManager } from './common/services/services.ts';
 
 declare module 'fastify' {
     interface FastifyRequest {
@@ -9,6 +9,6 @@ declare module 'fastify' {
 
 declare module 'fastify' {
     interface Session {
-        chats: ContextChatsMessages;
+        chatsContextManager: ChatsContextManager;
     }
 }

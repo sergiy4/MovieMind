@@ -3,12 +3,17 @@ import fastifySession from '@fastify/session';
 import fp from 'fastify-plugin';
 
 import { type BaseConfig } from '~/common/config/base-config.package.js';
+import {
+    type TextTokenCounterService,
+    ChatsContextManager,
+} from '~/common/services/services.js';
 
 import { Hook } from './enums/enums.js';
 
 type Options = {
     services: {
         config: BaseConfig;
+        textTokenCounterService: TextTokenCounterService;
     };
 };
 
@@ -20,12 +25,16 @@ const session = fp<Options>(async (fastify, { services }): Promise<void> => {
     });
 
     fastify.addHook(Hook.ON_REQUEST, (request, _replay, done) => {
-        if (!request.session.chats) {
-            request.session.chats = {};
+        const { textTokenCounterService } = services;
+
+        if (!request.session.chatsContextManager) {
+            request.session.chatsContextManager = new ChatsContextManager({
+                textTokenCounterService,
+            });
         }
 
         done();
     });
 });
 
-export { type Options as SessionOptions,session };
+export { type Options as SessionOptions, session };
