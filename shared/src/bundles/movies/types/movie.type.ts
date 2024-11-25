@@ -6,7 +6,7 @@ type Movie = {
     year: string;
     posterUrl: string;
     description: string;
-    tmdbId: string;
+    tmdbId: number;
     type: ContentType;
 };
 
