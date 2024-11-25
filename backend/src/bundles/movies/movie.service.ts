@@ -1,3 +1,6 @@
+import { movieMapper } from '~/common/services/movie-api/helpers/helpers.js';
+import { type MovieApi } from '~/common/services/movie-api/movie-api.js';
+import { type GetMovieRequest } from '~/common/services/movie-api/types/types.js';
 import { type Service } from '~/common/types/types.js';
 
 import { MovieEntity } from './movie.entity.js';
@@ -6,13 +9,16 @@ import { type Movie } from './types/types.js';
 
 type Constructor = {
     movieRepository: MovieRepository;
+    movieApi: MovieApi;
 };
 
 class MovieService implements Service {
     private movieRepository: MovieRepository;
+    private movieApi: MovieApi;
 
-    public constructor({ movieRepository }: Constructor) {
+    public constructor({ movieRepository, movieApi }: Constructor) {
         this.movieRepository = movieRepository;
+        this.movieApi = movieApi;
     }
 
     public async create(payload: Omit<Movie, 'id'>): Promise<Movie> {
@@ -45,6 +51,15 @@ class MovieService implements Service {
             messageId,
         );
         return movies.map((it) => it.toObject());
+    }
+
+    public async getMoviesAndTvsByNameAndYear(
+        data: GetMovieRequest[],
+    ): Promise<Omit<Movie, 'id'>[]> {
+        const apiMovies =
+            await this.movieApi.getMoviesAndTvsByNameAndYear(data);
+
+        return movieMapper(apiMovies);
     }
 
     public async findAll(): Promise<{ items: Movie[] }> {
