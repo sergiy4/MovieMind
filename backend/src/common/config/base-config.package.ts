@@ -98,6 +98,14 @@ class BaseConfig implements Config {
                     default: null,
                 },
             },
+            MOVIE_API: {
+                TMDB_KEY: {
+                    doc: 'Key for tmdb api',
+                    format: String,
+                    env: 'TMDB_KEY',
+                    default: null,
+                },
+            },
         });
     }
 }

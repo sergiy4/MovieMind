@@ -22,6 +22,9 @@ type EnvironmentSchema = {
     SESSION: {
         SESSION_KEY: string;
     };
+    MOVIE_API: {
+        TMDB_KEY: string;
+    };
 };
 
 export { type EnvironmentSchema };
