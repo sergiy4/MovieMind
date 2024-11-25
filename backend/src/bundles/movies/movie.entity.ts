@@ -13,7 +13,7 @@ class MovieEntity implements Entity {
 
     private 'description': string;
 
-    private 'tmdbId': string;
+    private 'tmdbId': number;
 
     private 'type': ContentType;
 
@@ -31,7 +31,7 @@ class MovieEntity implements Entity {
         year: string;
         posterUrl: string;
         description: string;
-        tmdbId: string;
+        tmdbId: number;
         type: ContentType;
     }) {
         this.id = id;
@@ -57,7 +57,7 @@ class MovieEntity implements Entity {
         year: string;
         posterUrl: string;
         description: string;
-        tmdbId: string;
+        tmdbId: number;
         type: ContentType;
     }): MovieEntity {
         return new MovieEntity({
@@ -83,7 +83,7 @@ class MovieEntity implements Entity {
         year: string;
         posterUrl: string;
         description: string;
-        tmdbId: string;
+        tmdbId: number;
         type: ContentType;
     }): MovieEntity {
         return new MovieEntity({
@@ -103,7 +103,7 @@ class MovieEntity implements Entity {
         year: string;
         posterUrl: string;
         description: string;
-        tmdbId: string;
+        tmdbId: number;
         type: ContentType;
     } {
         return {
@@ -122,7 +122,7 @@ class MovieEntity implements Entity {
         year: string;
         posterUrl: string;
         description: string;
-        tmdbId: string;
+        tmdbId: number;
         type: ContentType;
     } {
         return {
