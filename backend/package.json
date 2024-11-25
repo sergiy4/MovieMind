@@ -38,6 +38,7 @@
         "pg": "^8.13.1",
         "pino": "^9.4.0",
         "pino-pretty": "^11.2.2",
+        "query-string": "^9.1.1",
         "tiktoken": "^1.0.17"
     },
     "devDependencies": {

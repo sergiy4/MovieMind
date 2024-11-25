@@ -85,7 +85,7 @@ async function up(knex: Knex): Promise<void> {
             useNative: true,
             enumName: 'content_type',
         });
-        table.string(ColumnName.TMDB_ID).notNullable();
+        table.integer(ColumnName.TMDB_ID).notNullable();
         table
             .dateTime(ColumnName.CREATED_AT)
             .notNullable()

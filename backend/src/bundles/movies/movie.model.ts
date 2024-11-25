@@ -18,7 +18,7 @@ class MovieModel extends AbstractModel {
 
     public 'description': string;
 
-    public 'tmdbId': string;
+    public 'tmdbId': number;
 
     public 'type': ContentType;
 

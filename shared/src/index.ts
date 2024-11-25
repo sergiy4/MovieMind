@@ -37,6 +37,8 @@ export {
     type GetMovieRequestDto,
     type GetMovieResponseDto,
     type Movie,
+    type MovieApiContent,
+    type MovieApiResponse,
     ContentTypeEnum,
 } from './bundles/movies/movies.js';
 export {

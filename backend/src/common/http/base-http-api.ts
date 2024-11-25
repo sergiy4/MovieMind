@@ -2,7 +2,7 @@ import { HttpError } from 'shared';
 
 import { type HttpCode } from './enums/enums.js';
 import { HttpHeader } from './enums/enums.js';
-import { configureString } from './helpers/helpers.js';
+import { getStringifiedQuery } from './helpers/helpers.js';
 import {
     type CustomHeader,
     type Http,
@@ -63,18 +63,16 @@ class BaseHttpApi implements HttpApi {
     }
 
     protected getFullEndpoint<T extends Record<string, string>>(
-        ...parameters: [...string[], T]
+        url: string,
+        queryParameters: T,
     ): string {
-        const copiedParameters = [...parameters];
+        const copiedParameters = [this.baseUrl, this.path, url];
 
-        const options = copiedParameters.pop() as T;
+        const result = copiedParameters.join('');
 
-        return configureString(
-            this.baseUrl,
-            this.path,
-            ...(copiedParameters as string[]),
-            options,
-        );
+        const queryParametersString = getStringifiedQuery(queryParameters);
+
+        return `${result}?${queryParametersString}`;
     }
 
     private getHeaders(customHeaders: CustomHeader): Headers {

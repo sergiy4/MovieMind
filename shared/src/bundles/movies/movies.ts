@@ -4,4 +4,6 @@ export {
     type GetMovieRequestDto,
     type GetMovieResponseDto,
     type Movie,
+    type MovieApiContent,
+    type MovieApiResponse,
 } from './types/types.js';
