@@ -46,6 +46,7 @@ class MovieRepository implements Repository {
                     .query()
                     .whereIn(
                         ['tmdbId', 'type'],
+                        // @ts-expect-error: Objection type error
                         data.map((it) => [it.tmdbId, it.type]),
                     )
                     .execute();
